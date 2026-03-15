@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>猜数字游戏</title>
+    <style>
+        body {
+            background:#F4F8F5 ;
+      
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        .Board {
+        
+            padding: 32px;
+            text-align: center;
+            
+            background: white;
+            border: none;
+            border-radius: 28px;
+            width: 70%;
+            min-height: 400px;
+        
+
+        }
+        .bt {
+            padding: 8px 16px;
+            background:#67A079;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            width: 16%;
+            min-width: 120px;
+
+
+        }
+        .GS {
+            font-size: 22px;
+            color: rgb(100,100,100);
+        
+        }
+        .ipt{
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            outline: none;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #DEEBDA;
+        }
+
+
+    </style>
+</head>
+<body>
+  
+    
+    <div class="Board">
+
+        <h1 class="GS">George Studio</h1>
+        <h1>猜数字游戏</h1>
+
+        <span><b>我已经想好 1~100 之间的一个数字</b></span>
+        <br> <br>
+
+        <input class="ipt" type="number" id="guessInput" placeholder="请输入数字">
+        <br>
+        <br>
+
+        <button onclick="guess()" class="bt"><b>猜一下</b></button>
+
+        <button onclick="resetGame()" class="bt"><b>重新开始</b></button>
+
+        <p id="tip"></p>
+        <p id="count">
+            已猜次数：0
+        </p>
+    </div>
+    
+    <script>
+        //Version:1.0 (C) 2026 George.All Rights Reserved.
+        // 生成答案
+        let answer = Math.floor(Math.random() * 100) + 1;
+        let count = 0;
+
+        function guess() {
+            const input = document.getElementById('guessInput');
+            const tip = document.getElementById('tip');
+            const countText = document.getElementById('count');
+
+            let num = parseInt(input.value);
+
+            // 验证输入
+            if (isNaN(num) || num < 1 || num > 100) {
+                tip.textContent = '请输入 1~100 之间的数字！';
+
+
+                return;
+            }
+
+            count++;
+            countText.textContent = `已猜次数：${count}`;
+
+            if (num < answer) {
+                tip.textContent = '太小了，再大一点！';
+
+            } else if (num > answer) {
+                tip.textContent = '太大了，再小一点！';
+
+            } else {
+                tip.textContent = `🎉 恭喜猜对！答案是 ${answer}，共猜了 ${count} 次`;
+                tip.style.color = '#4caf50';
+            }
+        }
+
+        function resetGame() {
+            answer = Math.floor(Math.random() * 100) + 1;
+            count = 0;
+            document.getElementById('guessInput').value = '';
+            document.getElementById('tip').textContent = '';
+            document.getElementById('count').textContent = '已猜次数：0';
+        }
+    </script>
+</body>
+</html>
