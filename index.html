@@ -83,7 +83,7 @@
     </div>
     
     <script>
-        //Version:1.0 (C) 2026 George.All Rights Reserved.
+        //Version:1.1 (C) 2026 George.All Rights Reserved.
         // 生成答案
         let answer = Math.floor(Math.random() * 100) + 1;
         let count = 0;
@@ -124,6 +124,7 @@
             document.getElementById('guessInput').value = '';
             document.getElementById('tip').textContent = '';
             document.getElementById('count').textContent = '已猜次数：0';
+            tip.style.color = 'black';
         }
     </script>
 </body>
