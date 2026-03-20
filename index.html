@@ -14,6 +14,17 @@
             align-items: center;
 
         }
+        .htp {
+            padding: 7px 6px;
+            background:#87b5b2;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-size: 12px;
+            width: 8%;
+            min-width: 40px;
+            
+        }
         .Board {
         
             padding: 32px;
@@ -39,6 +50,7 @@
 
 
         }
+        
         .GS {
             font-size: 22px;
             color: rgb(100,100,100);
@@ -58,14 +70,15 @@
     </style>
 </head>
 <body>
-  
+
+    
     
     <div class="Board">
-
-        <h1 class="GS">George Studio</h1>
+        <button onclick="howtoplay()" class="htp"><b>怎么玩</b></button>
+        <h1 class="GS">GuessGame</h1>
         <h1>猜密码游戏</h1>
 
-        <span><b>我已经想好一个6位密码（大写+小写+数字）</b></span>
+        <span><b>我已经想好一个8位密码（大写+小写+数字）</b></span>
         <br> <br>
 
         <input class="ipt" type="text" id="guessInput" placeholder="请输入密码">
@@ -83,14 +96,14 @@
     </div>
     
     <script>
-        //Version:1.3 (C) 2026 George.All Rights Reserved.
+        //Version:1.4 (C) 2026 George.All Rights Reserved.
         // 生成答案
         function createPassword()
         {
             let Password = '';
             let B = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
             let S = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-            for (let i = 1;i<=6;i++)
+            for (let i = 1;i<=8;i++)
             {
                 let random_n = Math.floor(Math.random() * (3 - 1 + 1)) + 1;
                 if (random_n == 1)
@@ -122,33 +135,83 @@
             
             //console.log(num);
             console.log(answer);
-            if (User_input.length!=6) {
-                tip.textContent = '请输入6位密码！';
+            if (User_input.length!=8) {
+                tip.textContent = '请输入8位密码！';
                 console.log('Error');
 
                 return;
             }
             else
             {
-                let tipt = '';
-                for (let i = 0;i<6;i++)
+             
+                let Green = 0;
+                let Yellow = 0;
+                let Red = 0;
+                for (let i = 0;i<8;i++)
                 {
                     
                     if (User_input[i] == answer[i])
                     {
-                        tipt = tipt + '*';
+                        Green=1;
                     }
                     else
                     {
-                        tipt = tipt + 'x';
+                        let Check = false;
+                        for (let j = 0;j<8;j++)
+                        {
+                            if (User_input[i] == answer[j])
+                            {
+                                Check = true;
+                                break;
+                            }
+                        }
+
+                        if (Check == true)
+                        {
+                            Yellow=1;
+                        }
+                        if (Check == false)
+                        {
+                            let Last_Check = false;
+                            for (let j = 0;j<8;j++)
+                            {
+                                if (User_input[i] == answer[j])
+                                {
+                                    Last_Check = true;
+                                    break;
+                                }
+                            }
+                            if (Last_Check == false)
+                            {
+                                Red=1;
+                            }
+                            else
+                            {
+                                Yellow=1;
+                            }
+                        }
                     }
                 }
                 count++;
                 countText.textContent = '已猜次数：' + count;
-
+                let tip_text = '';
+                
+                if (Green == 1)
+                {
+                    tip_text = tip_text + '*';
+                }
+                if (Yellow == 1)
+                {
+                    tip_text = tip_text + 'o';
+                }
+                if (Red == 1)
+                {
+                    tip_text = tip_text + 'x';
+                }
+                
                 if (User_input != answer) 
                 {
-                    tip.textContent = tipt;
+                    tip.textContent = tip_text;
 
                 } 
                 else 
@@ -166,13 +229,21 @@
         }
 
         function resetGame() {
+            Red = 0;
+            Yellow = 0;
+            Green = 0;
             answer = createPassword();
             count = 0;
+            tip_text = '';
             document.getElementById('guessInput').value = '';
             document.getElementById('tip').textContent = '';
             document.getElementById('count').textContent = '已猜次数：0';
             tip.style.color = 'black';
         }
+        function howtoplay()
+        {
+            alert('在此游戏中玩家需要破解由数字(1~9)、大写英文字母、小写英文字母所组成的8位随机密码(猜测次数不限，密码不一定包含三种不同类别字符，密码可能存在重复字符)。输入完成后请点击“猜一下”按钮提交，程序会显示三种提示符号(*,o,x)，其中“*”表示输入的密码中包含1位及1位以上的字符在答案存在且位置正确，“o”表示输入的密码中包含1位及1位以上的字符在答案存在但位置错误，“x”表示输入的密码中包含1位及1位以上的字符在答案不存在。游戏结束后玩家可以点击“重新开始”按钮开启新一局');
+        }        
     </script>
 </body>
 </html>
