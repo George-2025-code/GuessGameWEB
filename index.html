@@ -67,7 +67,7 @@
             border-radius: 16px;
             text-align: center;
             border: 1px solid #DEEBDA;
-            cursor: text;
+            cursor:text;
         }
 
 
@@ -78,7 +78,7 @@
     
     
     <div class="Board">
-        
+    
         <h1 class="GS">GuessGame</h1>
         <h1>猜密码游戏</h1>
 
@@ -131,6 +131,7 @@
 
         }
         let answer = createPassword();
+        console.log(answer);
         
         let count = 0;
 
@@ -140,12 +141,10 @@
             const countText = document.getElementById('count');
 
             let User_input = (input.value).toString();
-            
-            //console.log(num);
-            console.log(answer);
+        
             if (User_input.length!=8) {
                 tip.textContent = '请输入8位密码！';
-                console.log('Error');
+              
 
                 return;
             }
@@ -201,7 +200,7 @@
                     }
                 }
                 count++;
-                countText.textContent = '已猜次数：' + count;
+        
                 let tip_text = '';
                 
                 if (Green == 1)
