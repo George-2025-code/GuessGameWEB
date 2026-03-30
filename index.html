@@ -98,19 +98,22 @@
         <button onclick="guess()" class="bt"><b>猜一下</b></button>
 
         <button onclick="resetGame()" class="bt"><b>重新开始</b></button>
+
         <br>
         <br>
         <button onclick="howtoplay()" class="htp"><b>怎么玩</b></button>
 
         <p id="tip"></p>
         <p id="count">
+
             已猜次数：0
         </p>
+        <p id="showtime">时间:</p>
         <p id = "HTP"></p>
     </div>
     
     <script>
-        //Version:1.5 (C) 2026 George.All Rights Reserved.
+        //Version:1.6 (C) 2026 George.All Rights Reserved.
         function swapPos(pwd)
         {
             let a = [8];
@@ -167,14 +170,39 @@
         }
         let answer = createPassword();
        
-       
+        const showtime = document.getElementById('showtime');
+
         
         let count = 0;
+        let time = 120;
+        let timer;
+        timer = setInterval(() => {
+            time--;
+            showtime.textContent = "时间:" + time + "s";
+            if (time<=0)
+        {
+            clearInterval(timer);
+    time = 0;                 
+    showtime.textContent = "时间:0s";
+    tip.textContent = "时间已到！必须点击【重新开始】！";
+    document.getElementById("guessInput").disabled = true;
+        }
+        
+        
+        }, 1000);
+        
+
+        showtime.textContent = '时间:' + time + 's';
+
 
         function guess() {
             const input = document.getElementById('guessInput');
             const tip = document.getElementById('tip');
             const countText = document.getElementById('count');
+            if(time <= 0) {
+                tip.textContent = "游戏结束！请点击重新开始游戏！";
+                return;
+            }
 
             let User_input = (input.value).toString();
             
@@ -286,7 +314,16 @@
             document.getElementById('guessInput').value = '';
             document.getElementById('tip').textContent = '';
             document.getElementById('count').textContent = '已猜次数：0';
+            document.getElementById('guessInput').disabled = false;
             tip.style.color = 'black';
+            clearInterval(timer);
+time = 120;
+
+timer = setInterval(() => {
+    time--;
+    showtime.textContent = "时间:" + time + "s";
+    if(time <= 0) clearInterval(timer);
+}, 1000);
         }
         function howtoplay()
         {
