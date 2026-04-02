@@ -60,6 +60,10 @@
             border: 1px solid #DEEBDA;
             outline: none;
         }
+        .HS{
+            color: #be7171;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -87,11 +91,14 @@
         <p id="tip"></p>
         <p id="count">已猜次数：0</p>
         <p id="showtime">时间:</p>
+
+        <p id="History" class="HS"></p>
+
         <p id="HTP"></p>
     </div>
     
     <script>
-        //Version:1.8 (C) 2026 George.All Rights Reserved.
+        //Version:1.9 (C) 2026 George.All Rights Reserved.
 
         function checkInput(input) {
 
@@ -144,6 +151,7 @@
             const countText = document.getElementById('count');
             const d1 = document.getElementById('d1'), d2 = document.getElementById('d2');
             const d3 = document.getElementById('d3'), d4 = document.getElementById('d4');
+            const history = document.getElementById('History');
 
             if(time <= 0) {
                 tip.textContent = "游戏结束！请点击重新开始游戏！";
@@ -204,8 +212,8 @@
             count++;
             countText.textContent = '已猜次数：' + count;
 
-           
-    
+            
+
             if (bull == 4) {
                 tip.textContent = `🎉 恭喜猜对！答案是 ${answer}，共猜了 ${count} 次`;
                 tip.style.color = '#4caf50';
@@ -214,6 +222,8 @@
                 tip.textContent = `Bull:${bull} | Cow:${cow}`;
                 tip.style.color = 'black';
             }
+
+            history.innerHTML= history.innerHTML + "第" + count + "次：" + user + " → Bull:" + bull + " | Cow:" + cow + "<br>";
         }
 
         function resetGame() {
@@ -229,6 +239,7 @@
             document.getElementById('d2').disabled = false;
             document.getElementById('d3').disabled = false;
             document.getElementById('d4').disabled = false;
+            document.getElementById('History').innerHTML='';
             tip.style.color = 'black';
             clearInterval(timer);
             time = 120;
