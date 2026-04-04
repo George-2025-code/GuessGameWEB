@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0,user-scalable=no">
+    <title>Guess Game</title>
+    <style>
+        body
+        {
+            background:#d9e8da;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial;
+
+        }
+        .Copyright
+        {
+            font-size: 70px;
+            color: rgba(70, 157, 145, 0.99)
+        }
+
+
+
+
+
+    </style>
+</head>
+<body>
+<h1 class="Copyright"><b>George Studio</b></h1>
+
+<script>
+let time = 3;
+let timer = setInterval(() => {
+    time--;
+    if (time <= 0) {
+        clearInterval(timer);
+        window.location.href = "main.html";
+    }
+}, 1000);
+
+</script>
+</body>
+</html>
