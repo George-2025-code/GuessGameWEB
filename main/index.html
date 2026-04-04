@@ -25,6 +25,8 @@
             cursor: pointer;
         }
         .Board {
+            
+            
             padding: 32px;
             text-align: center;
             background: white;
@@ -32,6 +34,8 @@
             border-radius: 28px;
             width: 70%;
             min-height: 400px;
+            
+
         }
         .bt {
             padding: 8px 16px;
@@ -51,12 +55,27 @@
         .color-btn {
             width: 40px;
             height: 40px;
-            border-radius: 12px;
+            border-radius: 13px;
             border: 1px solid #DEEBDA;
             outline: none;
             cursor: pointer;
             margin: 0 5px;
             background:#ffffff;
+        }
+        .digit-container {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            width: 210px;
+            height: 55px;
+            background: #ffffff00;
+
+            border-radius: 16px;
+            border: 2px solid #b5d9aa;
+            margin: 4px auto;
+
         }
     </style>
 </head>
@@ -68,10 +87,14 @@
         <br> <br>
         <div class="digit-container">
             <button class="color-btn" id="c1" onclick="changeColor(1,this)"></button>
+            
             <button class="color-btn" id="c2" onclick="changeColor(2,this)"></button>
+       
             <button class="color-btn" id="c3" onclick="changeColor(3,this)"></button>
+            
             <button class="color-btn" id="c4" onclick="changeColor(4,this)"></button>
         </div>
+
         <br>
         <button onclick="guess()" class="bt"><b>猜一下</b></button>
         <button onclick="resetGame()" class="bt"><b>重新开始</b></button>
