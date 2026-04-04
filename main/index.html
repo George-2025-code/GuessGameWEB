@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" content="width=device-width,maximum-scale=1.0,user-scalable=no">
+    <meta charset="UTF-8">
+    <title>猜密码游戏</title>
+    <style>
+        body {
+            background:#F4F8F5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial;
+        }
+        .htp {
+            padding: 7px 6px;
+            background:#67A079;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-size: 12px;
+            width: 8%;
+            min-width: 58px;
+            cursor: pointer;
+        }
+        .Board {
+            padding: 32px;
+            text-align: center;
+            background: white;
+            border: none;
+            border-radius: 28px;
+            width: 70%;
+            min-height: 400px;
+        }
+        .bt {
+            padding: 8px 16px;
+            background:#67A079;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            width: 16%;
+            min-width: 120px;
+            cursor: pointer;
+        }
+        .GS {
+            font-size: 22px;
+            color: rgb(100,100);
+        }
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid #DEEBDA;
+            outline: none;
+            cursor: pointer;
+            margin: 0 5px;
+            background:#ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="Board">
+        <h1 class="GS">GuessGame</h1>
+        <h1>猜密码游戏</h1>
+        <span><b>我已经想好一个4色密码（颜色不重复）</b></span>
+        <br> <br>
+        <div class="digit-container">
+            <button class="color-btn" id="c1" onclick="changeColor(1,this)"></button>
+            <button class="color-btn" id="c2" onclick="changeColor(2,this)"></button>
+            <button class="color-btn" id="c3" onclick="changeColor(3,this)"></button>
+            <button class="color-btn" id="c4" onclick="changeColor(4,this)"></button>
+        </div>
+        <br>
+        <button onclick="guess()" class="bt"><b>猜一下</b></button>
+        <button onclick="resetGame()" class="bt"><b>重新开始</b></button>
+        <br><br>
+        <button onclick="howtoplay()" class="htp"><b>怎么玩</b></button>
+        <p id="tip"></p>
+        <p id="count">已猜次数：0</p>
+        <p id="showtime">时间:</p>
+        <p id="History"></p>
+        <p id="HTP"></p>
+    </div>
+    <script>
+        //Copyright © 2026 George Studio.All rights reserved.
+        //Version: 2.0        
+        const COLOR1 = "#ff4444";
+        const COLOR2 = "#ff9800";
+        const COLOR3 = "#ffeb3b";
+        const COLOR4 = "#4caf50";
+        const COLOR5 = "#2196f3";
+        const COLOR6 = "#9c27b0";
+        const WHITE = "#ffffff";
+
+        let selectNums = ["", "", "", ""];
+
+        function changeColor(pos, btn) {
+            let idx = pos - 1;
+            let num = selectNums[idx];
+
+            if(num === ""){
+                btn.style.backgroundColor = COLOR1;
+                selectNums[idx] = "1";
+            }else if(num === "1"){
+                btn.style.backgroundColor = COLOR2;
+                selectNums[idx] = "2";
+            }else if(num === "2"){
+                btn.style.backgroundColor = COLOR3;
+                selectNums[idx] = "3";
+            }else if(num === "3"){
+                btn.style.backgroundColor = COLOR4;
+                selectNums[idx] = "4";
+            }else if(num === "4"){
+                btn.style.backgroundColor = COLOR5;
+                selectNums[idx] = "5";
+            }else if(num === "5"){
+                btn.style.backgroundColor = COLOR6;
+                selectNums[idx] = "6";
+            }else if(num === "6"){
+                btn.style.backgroundColor = WHITE;
+                selectNums[idx] = "";
+            }
+        }
+
+        function numToColorStr(str){
+            let arr=[];
+            for(let c of str){
+                if(c==="1") arr.push("红");
+                if(c==="2") arr.push("橙");
+                if(c==="3") arr.push("黄");
+                if(c==="4") arr.push("绿");
+                if(c==="5") arr.push("蓝");
+                if(c==="6") arr.push("紫");
+            }
+            return arr.join("");
+        }
+
+        function createPassword() {
+            let pwd = [];
+            while(pwd.length < 4){
+                let num = Math.floor(Math.random() * 6) + 1;
+                if(!pwd.includes(num)){
+                    pwd.push(num);
+                }
+            }
+            return pwd.join('');
+        }
+
+        function getBullCow(user, ans) {
+            let bull = 0, cow = 0;
+            let usedAns = [false,false,false,false];
+            let usedUser = [false,false,false,false];
+            for(let i=0;i<4;i++){
+                if(user[i] === ans[i]){ bull++; usedAns[i]=usedUser[i]=true; }
+            }
+            for(let i=0;i<4;i++){
+                if(usedUser[i]) continue;
+                for(let j=0;j<4;j++){
+                    if(!usedAns[j] && user[i] === ans[j]){ cow++; usedAns[j]=true; break; }
+                }
+            }
+            return {bull,cow};
+        }
+
+        let answer = createPassword();
+        const showtime = document.getElementById('showtime');
+        let count = 0;
+        let time = 300;
+        let timer;
+
+        timer = setInterval(() => {
+            time--;
+            showtime.textContent = "时间:" + time + "s";
+            if (time<=0) {
+                clearInterval(timer);
+                time = 0;
+                showtime.textContent = "时间:0s";
+                document.getElementById("c1").disabled = true;
+                document.getElementById("c2").disabled = true;
+                document.getElementById("c3").disabled = true;
+                document.getElementById("c4").disabled = true;
+                tip.textContent = "时间已到！必须点击【重新开始】！";
+            }
+        }, 1000);
+
+        showtime.textContent = '时间:' + time + 's';
+
+        function guess() {
+            const tip = document.getElementById('tip');
+            const countText = document.getElementById('count');
+            const history = document.getElementById('History');
+            
+            if(time <= 0) {
+                tip.textContent = "游戏结束！请点击重新开始游戏！";
+                return;
+            }
+
+            let user = selectNums.join('');
+            if (user.length!=4) {
+                tip.textContent = '请选择完整4个颜色！';
+                return;
+            }
+
+            let isRepeat = false;
+            for(let i = 0; i < 4; i++){
+                for(let j = i + 1; j < 4; j++){
+                    if(user[i] == user[j]){
+                        isRepeat = true;
+                        break;
+                    }
+                }
+                if(isRepeat) break;
+            }
+            if(isRepeat){
+                tip.textContent = '颜色不能重复！';
+                return;
+            }
+
+            let res = getBullCow(user, answer);
+            let bull = res.bull;
+            let cow = res.cow;
+
+            count++;
+            countText.textContent = '已猜次数：' + count;
+            let userColor = numToColorStr(user);
+            
+            if (bull == 4) {
+                let ansColor = numToColorStr(answer);
+                tip.textContent = `🎉 恭喜猜对！答案是 ${ansColor}，共猜了 ${count} 次`;
+                tip.style.color = '#4caf50';
+                document.getElementById("c1").disabled = true;
+                document.getElementById("c2").disabled = true;
+                document.getElementById("c3").disabled = true;
+                document.getElementById("c4").disabled = true;
+            } else {
+                tip.textContent = `Bull:${bull} | Cow:${cow}`;
+                tip.style.color = 'black';
+            }
+
+            history.innerHTML =  history.innerHTML+`第${count}次：${userColor} → Bull:${bull} | Cow:${cow}<br>`;
+        }
+
+        function resetGame() {
+            answer = createPassword();
+            count = 0;
+            time = 300;
+            selectNums = ["", "", "", ""];
+            
+            let btns = document.querySelectorAll('.color-btn');
+            btns.forEach(btn=>{
+                btn.style.backgroundColor = WHITE;
+                btn.disabled = false;
+            });
+
+            document.getElementById('tip').textContent = '';
+            document.getElementById('count').textContent = '已猜次数：0';
+            document.getElementById('History').textContent = '';
+            tip.style.color = 'black';
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                time--;
+                showtime.textContent = "时间:" + time + "s";
+                if(time <= 0) clearInterval(timer);
+            }, 1000);
+            showtime.textContent = '时间:' + time + 's';
+        }
+
+        function howtoplay() {
+            let text = document.getElementById('HTP');
+            let rule = '游戏规则：点击方块切换颜色，选择4个不重复颜色提交；Bull=颜色位置都对，Cow=颜色对位置错，300秒倒计时结束游戏结束。';
+            if (text.textContent !== rule) {
+                text.textContent = rule;
+            } else {
+                text.textContent = '';
+            }
+        }        
+    </script>
+</body>
+</html>
